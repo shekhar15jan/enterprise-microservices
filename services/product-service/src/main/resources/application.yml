@@ -1,6 +1,6 @@
 server:
   port: 8081
-
+---
 spring:
   application:
     name: product-service
@@ -14,7 +14,20 @@ spring:
       ddl-auto: update
     show-sql: true
     database-platform: org.hibernate.dialect.MySQL8Dialect
+  cache:
+    type: redis
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      connect-timeout: 6000
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          max-wait: -1ms
 
+---
 eureka:
   client:
     service-url:

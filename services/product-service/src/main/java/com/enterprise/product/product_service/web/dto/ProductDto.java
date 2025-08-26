@@ -9,9 +9,7 @@ public record ProductDto(
         String name,
         String description,
         BigDecimal price,
-        Integer stock   Quantity,
-        LocalDateTime createdDate,
-        LocalDateTime updatedDate
+        Integer stockQuantity
 ){
     public static Builder builder(){
         return new Builder();
@@ -22,8 +20,6 @@ public record ProductDto(
         private String description;
         private BigDecimal price;
         private Integer stockQuantity;
-        private LocalDateTime createdDate;
-        private LocalDateTime updatedDate;
 
         public Builder publicId(UUID publicId){
             this.publicId = publicId;
@@ -45,16 +41,8 @@ public record ProductDto(
             this.stockQuantity = stockQuantity;
             return this;
         }
-        public Builder createdDate(LocalDateTime createdDate){
-            this.createdDate = createdDate;
-            return this;
-        }
-        public Builder updatedDate(LocalDateTime updatedDate){
-            this.updatedDate = updatedDate;
-            return this;
-        }
         public ProductDto build(){
-            return new ProductDto(publicId,name,description,price,stockQuantity,createdDate,updatedDate);
+            return new ProductDto(publicId,name,description,price,stockQuantity);
         }
     }
 

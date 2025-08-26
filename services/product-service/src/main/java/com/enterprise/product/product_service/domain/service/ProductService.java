@@ -12,10 +12,10 @@ import java.util.UUID;
 public interface ProductService {
 
     ProductDto createProduct(ProductDto productDto);
-//    ProductDto updateProduct(UUID publicId,ProductDto productDto);
-//    ProductDto getByPublicId(UUID publicId);
+    ProductDto updateProduct(UUID publicId,ProductDto productDto);
+    ProductDto getByPublicId(UUID publicId);
 //    Page<ProductDto> getAllProducts(Pageable pageable, String search);
-//    void deleteProduct(UUID publicId);
+    void deleteProduct(UUID publicId);
 //
 //    ProductDto increseStock(UUID publicId, int quantity);
 //

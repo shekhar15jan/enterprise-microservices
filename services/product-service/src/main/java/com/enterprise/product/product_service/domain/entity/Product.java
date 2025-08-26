@@ -1,5 +1,6 @@
 package com.enterprise.product.product_service.domain.entity;
 
+import com.enterprise.product.product_service.domain.entity.audit.AuditableEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
@@ -7,12 +8,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -27,14 +24,13 @@ import java.util.UUID;
 )
 @Getter
 @Setter
-public class Product {
+public class Product extends AuditableEntity {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, unique = true, updatable = false, columnDefinition = "BINARY(16)")
-    @GeneratedValue(strategy=GenerationType.UUID)
-    private UUID publicId; //external id
+    private UUID publicId = UUID.randomUUID(); //external id
 
     @Column(nullable = false, length = 150)
     @NotBlank(message = "Product name is required")
@@ -53,12 +49,6 @@ public class Product {
     @Getter
     @Version
     private Long version; //optimistic locking
-
-    @CreationTimestamp
-    private LocalDateTime createdDate;
-
-    @UpdateTimestamp
-    private LocalDateTime updatedDate;
 
     @Override
     public boolean equals(Object o) {
@@ -94,8 +84,6 @@ public class Product {
         private BigDecimal price;
         private Integer stockQuantity;
         private Long version;
-        private LocalDateTime createdDate;
-        private LocalDateTime updatedDate;
 
         public Builder id(Long id) {this.id = id; return this;}
         public Builder publicId(UUID publicId) {this.publicId = publicId; return this;}
@@ -104,8 +92,6 @@ public class Product {
         public Builder price(BigDecimal price) {this.price = price; return this;}
         public Builder stockQuantity(Integer stockQuantity) {this.stockQuantity = stockQuantity; return this;}
         public Builder version(Long version) {this.version = version; return this;}
-        public Builder createdDate(LocalDateTime createdDate) {this.createdDate = createdDate; return this;}
-        public Builder updatedDate(LocalDateTime updatedDate) {this.updatedDate = updatedDate; return this;}
         public Product build() {
             Product product = new Product();
             product.publicId = publicId;
@@ -114,8 +100,6 @@ public class Product {
             product.price = price;
             product.stockQuantity = stockQuantity;
             product.version = version;
-            product.createdDate = createdDate;
-            product.updatedDate = updatedDate;
             return product;
         }
     }
