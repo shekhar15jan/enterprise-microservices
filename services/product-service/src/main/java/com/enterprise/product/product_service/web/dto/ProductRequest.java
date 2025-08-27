@@ -10,14 +10,11 @@ public record ProductRequest(
         String name,
         @Size(max=1000)
         String description,
-
         @NotNull(message = "price is required")
         @DecimalMin(value = "0.1", inclusive = true, message = "price must be > =0.01")
         BigDecimal price,
-
         @NotNull(message = "stockQuantity is required")
         @Min(value = 0, message = "stockQuantity must be >= 0")
         Integer stockQuantity
-
         ) {
 }

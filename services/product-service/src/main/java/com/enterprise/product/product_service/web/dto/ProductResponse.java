@@ -10,7 +10,6 @@ public record ProductResponse(
         String description,
         BigDecimal price,
         Integer stockQuantity,
-        Long version,
         LocalDateTime createdDate,
         LocalDateTime updatedDate
 ) {

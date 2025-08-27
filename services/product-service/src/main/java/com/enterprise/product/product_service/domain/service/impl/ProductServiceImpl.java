@@ -9,10 +9,13 @@ import com.enterprise.product.product_service.exceptions.ProductNotFoundExceptio
 import com.enterprise.product.product_service.exceptions.ProductServiceException;
 import com.enterprise.product.product_service.web.dto.ProductDto;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,6 +62,24 @@ public class ProductServiceImpl implements ProductService {
             throw new ProductServiceException("Database Error while getting product "+publicId, e);
         }
     }
+
+    @Override
+    public Page<ProductDto> getAllProducts(Pageable pageable, String search) {
+        log.info("traceId={} - Fetching all products page={}, size={}, sort={}, search={}",
+                MDC.get("traceId"),
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                pageable.getSort(),
+                search);
+        Page<Product> productPage;
+        if(search == null || search.isEmpty()){
+            productPage = productRepository.findAll(pageable);
+        }else {
+            productPage = productRepository.findByNameContainingIgnoreCase(search,pageable);
+        }
+        return productPage.map(ProductMapper::toProductDto);
+    }
+
     @Override
     @Transactional
     @CachePut(value = "products", key="#publicId")

@@ -14,7 +14,7 @@ public interface ProductService {
     ProductDto createProduct(ProductDto productDto);
     ProductDto updateProduct(UUID publicId,ProductDto productDto);
     ProductDto getByPublicId(UUID publicId);
-//    Page<ProductDto> getAllProducts(Pageable pageable, String search);
+    Page<ProductDto> getAllProducts(Pageable pageable, String search);
     void deleteProduct(UUID publicId);
 //
 //    ProductDto increseStock(UUID publicId, int quantity);
