@@ -42,10 +42,6 @@ public class ProductController {
     }
     //GET: Get Product by Id
     @Operation(summary = "Get Product by ID")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Product found for id"),
-            @ApiResponse(responseCode = "404", description = "Product does not exists")
-    })
     @GetMapping("/{id}")
     public ResponseEntity<ProductDto> getAllProducts(@PathVariable UUID id) {
         ProductDto foundProduct = productService.getByPublicId(id);
@@ -54,10 +50,6 @@ public class ProductController {
 
     //Get: All product
     @Operation(summary = "Get All Products with Pagination and searching")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Products are found"),
-            @ApiResponse(responseCode = "404", description = "Products does not exists")
-    })
     @GetMapping
     public ResponseEntity<Page<ProductDto>> getAllProducts(
             @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
@@ -81,10 +73,6 @@ public class ProductController {
     }
     //Delete: Delete Product
     @Operation(summary = "Delete product by Id")
-    @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Product Deleted return no content"),
-            @ApiResponse(responseCode = "404", description = "Products does not exists")
-    })
     @DeleteMapping("/{id}")
     public ResponseEntity<ProductDto> deleteProduct(@PathVariable UUID id) {
         productService.deleteProduct(id);
