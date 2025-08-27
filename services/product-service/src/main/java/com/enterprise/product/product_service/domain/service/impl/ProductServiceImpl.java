@@ -4,6 +4,9 @@ import com.enterprise.product.product_service.domain.entity.Product;
 import com.enterprise.product.product_service.domain.repository.ProductRepository;
 import com.enterprise.product.product_service.domain.service.ProductMapper;
 import com.enterprise.product.product_service.domain.service.ProductService;
+import com.enterprise.product.product_service.domain.specification.ProductSearchCriteria;
+import com.enterprise.product.product_service.domain.specification.ProductSpecification;
+import com.enterprise.product.product_service.domain.specification.SearchParser;
 import com.enterprise.product.product_service.exceptions.ProductAlreadyExistsException;
 import com.enterprise.product.product_service.exceptions.ProductNotFoundException;
 import com.enterprise.product.product_service.exceptions.ProductServiceException;
@@ -16,6 +19,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,12 +75,16 @@ public class ProductServiceImpl implements ProductService {
                 pageable.getPageSize(),
                 pageable.getSort(),
                 search);
-        Page<Product> productPage;
-        if(search == null || search.isEmpty()){
-            productPage = productRepository.findAll(pageable);
-        }else {
-            productPage = productRepository.findByNameContainingIgnoreCase(search,pageable);
-        }
+        ProductSearchCriteria searchCriteria = SearchParser.parse(search);
+        Specification<Product> spec = (search == null || search.isEmpty()) ? null : ProductSpecification.searchInField(searchCriteria);
+        Page<Product> productPage = (spec == null) ? productRepository.findAll(pageable) : productRepository.findAll(spec, pageable);
+//
+//        if(search == null || search.isEmpty()){
+//            productPage = productRepository.findAll(pageable);
+//        }else {
+//            spec = ProductSpecification.searchInField(search);
+//            productPage =  productRepository.findAll(spec, pageable);
+//        }
         return productPage.map(ProductMapper::toProductDto);
     }
 

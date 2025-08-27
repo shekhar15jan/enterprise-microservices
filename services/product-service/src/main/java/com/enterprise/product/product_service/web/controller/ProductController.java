@@ -50,4 +50,16 @@ public class ProductController {
         Page<ProductDto> page = productService.getAllProducts(pageable, search);
         return ResponseEntity.ok(page);
     }
+    //Put: Update Product
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductDto> updateProduct(@PathVariable UUID id, @RequestBody @Valid ProductDto productRequest) {
+        ProductDto updatedProduct = productService.updateProduct(id, productRequest);
+        return ResponseEntity.ok(updatedProduct);
+    }
+    //Delete: Delete Product
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ProductDto> deleteProduct(@PathVariable UUID id) {
+        productService.deleteProduct(id);
+        return ResponseEntity.noContent().build();
+    }
 }
