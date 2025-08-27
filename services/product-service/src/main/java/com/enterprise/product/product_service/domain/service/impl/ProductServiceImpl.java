@@ -51,7 +51,7 @@ public class ProductServiceImpl implements ProductService {
         Objects.requireNonNull(publicId, "publicId cannot be null");
         log.info("Getting product by public id {}", publicId);
         try {
-            Product product = productRepository.findByPublicId(publicId).orElseThrow(() -> new ProductNotFoundException("Product with id "+publicId+" not found"));
+            Product product = productRepository.findByPublicId(publicId).orElseThrow(() -> new ProductNotFoundException(publicId));
             log.debug("Product {} found for  public id {}", product, publicId);
             return ProductMapper.toProductDto(product);
         }catch (DataIntegrityViolationException e) {
@@ -66,7 +66,7 @@ public class ProductServiceImpl implements ProductService {
         Objects.requireNonNull(publicId, "publicId cannot be null");
         Objects.requireNonNull(productDto, "productDto cannot be null");
         try {
-            Product existingProduct = productRepository.findByPublicId(publicId).orElseThrow(() -> new ProductNotFoundException("Product with id "+publicId+" not found"));
+            Product existingProduct = productRepository.findByPublicId(publicId).orElseThrow(() -> new ProductNotFoundException(publicId));
             existingProduct.setName(productDto.name());
             existingProduct.setDescription(productDto.description());
             existingProduct.setPrice(productDto.price());
@@ -87,7 +87,7 @@ public class ProductServiceImpl implements ProductService {
         Objects.requireNonNull(publicId, "publicId cannot be null");
         log.info("Deleting product by public id {}", publicId);
         try {
-            Product product = productRepository.findByPublicId(publicId).orElseThrow(() -> new ProductNotFoundException("Product with id "+publicId+" not found"));
+            Product product = productRepository.findByPublicId(publicId).orElseThrow(() -> new ProductNotFoundException(publicId));
             productRepository.delete(product);
             log.info("Deleted product by public id {}", publicId);
         }catch (DataIntegrityViolationException e) {
